@@ -18,6 +18,7 @@ import {
   usingSuiteDefaultPayTo,
   type RoutePrices,
 } from "./payments.js";
+import { ROUTE_SCHEMAS } from "./schemas.js";
 import {
   ACTIVITY_PROFILES,
   BadRequestError,
@@ -39,27 +40,13 @@ const ROUTES: RoutePrices = {
     price: "$0.001",
     description:
       "Hourly weather forecast for a point and window — temperature, precipitation, wind, gusts, cloud, visibility, conditions — plus any active NWS alerts.",
-    outputSchema: {
-      type: "object",
-      properties: {
-        window: { type: "object" },
-        hourly: { type: "array", items: { type: "object" } },
-        alerts: { type: "array", items: { type: "object" } },
-      },
-    },
+    outputSchema: ROUTE_SCHEMAS["GET /forecast"],
   },
   "POST /decision": {
     price: "$0.002",
     description:
       "Go / no-go / risky verdict for a plan at a point and time window, with the threshold breaches that produced it and alternative windows that would clear the same bar.",
-    outputSchema: {
-      type: "object",
-      properties: {
-        verdict: { type: "string", enum: ["go", "risky", "no-go"] },
-        reasoning: { type: "array", items: { type: "object" } },
-        alternativeWindows: { type: "array", items: { type: "object" } },
-      },
-    },
+    outputSchema: ROUTE_SCHEMAS["POST /decision"],
   },
 };
 
@@ -89,11 +76,18 @@ app.get("/openapi.json", (_req, res) => {
   res.type("application/json").sendFile(join(root, "openapi.json"));
 });
 
-// Static site.
-app.use(express.static(publicDir));
+// Static site. `index: false` keeps `/` on the JSON handler below — the landing
+// page is served from there only when the caller actually asked for HTML.
+app.use(express.static(publicDir, { index: false }));
 
-// Free: service info.
-app.get("/", (_req, res) => {
+// Free: service info. Browsers and crawlers (Accept: text/html) get the landing
+// page with the origin's title/description/favicon metadata; agents and curl get
+// the JSON contract.
+app.get("/", (req, res) => {
+  if (req.accepts(["json", "html"]) === "html") {
+    res.sendFile(join(publicDir, "index.html"));
+    return;
+  }
   res.json({
     name: "x402-weather-guard",
     description:
