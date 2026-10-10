@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: If you use this software, please cite it as below.
+title: "x402-weather-guard"
+abstract: "Go/no-go weather decisions for plans: hourly forecasts and verdicts from Open-Meteo and NWS, keyless and live, paid with x402: USDC on Base or Solana."
+license: Apache-2.0
+repository-code: "https://github.com/nirholas/x402-weather-guard"
+url: "https://three.ws"
+authors:
+  - name: three.ws
+    website: "https://three.ws"
