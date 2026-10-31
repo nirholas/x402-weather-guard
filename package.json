@@ -38,7 +38,8 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "client": "tsx examples/agent-client.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test tests/*.test.ts"
   },
   "dependencies": {
     "dotenv": "^16.4.7",

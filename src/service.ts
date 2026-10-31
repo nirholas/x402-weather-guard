@@ -537,6 +537,18 @@ function verdictFor(breaches: Breach[], alerts: Alert[]): Verdict {
 }
 
 /**
+ * The "go" verdict sentence. It only claims "no alerts are in effect" when the
+ * alert source answered; outside NWS coverage the lookup fails and alerts were
+ * never checked, which the sentence must say instead.
+ */
+export function goSummary(windowHours: number, activity: string, alertStatus: string): string {
+  const alertClause = alertStatus.startsWith("ok")
+    ? "no alerts are in effect"
+    : "alerts were not checked for this location";
+  return `Go. Every hour of the ${windowHours}h window clears the ${activity} thresholds, and ${alertClause}.`;
+}
+
+/**
  * Go / no-go verdict for a point and a time window, with the reasoning that
  * produced it and alternative windows that would clear the same bar.
  */
@@ -658,7 +670,7 @@ export async function decision(input: {
 
   const summary =
     verdict === "go"
-      ? `Go. Every hour of the ${windowHours}h window clears the ${activity} thresholds, and no alerts are in effect.`
+      ? goSummary(windowHours, activity, fc.alertStatus)
       : verdict === "risky"
         ? `Risky. ${[breachPhrase, alertPhrase].filter(Boolean).join(" and ")} — none disqualifying on its own. Proceed with a contingency.${altPhrase}`
         : `No-go. ${[blocking.length ? `${blocking.length} disqualifying ${blocking.length === 1 ? "condition" : "conditions"} (${[...new Set(blocking.map((b) => b.factor))].join(", ")})` : "", activeAlerts.length ? alertPhrase : ""].filter(Boolean).join(" and ")} in the window.${altPhrase}`;
