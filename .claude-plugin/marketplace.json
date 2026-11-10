@@ -1,0 +1,21 @@
+{
+  "name": "x402-weather-guard",
+  "owner": {
+    "name": "nirholas"
+  },
+  "description": "Hourly weather forecasts and go, risky or no-go verdicts for plans, sold per call over x402 from Open-Meteo and NWS data.",
+  "plugins": [
+    {
+      "name": "x402-weather-guard",
+      "source": "./plugins/x402-weather-guard",
+      "description": "Hourly weather forecasts and go, risky or no-go verdicts for plans, sold per call over x402 from Open-Meteo and NWS data.",
+      "category": "data",
+      "tags": [
+        "weather",
+        "x402",
+        "forecast",
+        "decision"
+      ]
+    }
+  ]
+}
