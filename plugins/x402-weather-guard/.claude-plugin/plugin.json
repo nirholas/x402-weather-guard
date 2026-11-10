@@ -1,0 +1,19 @@
+{
+  "name": "x402-weather-guard",
+  "version": "0.1.0",
+  "description": "Hourly weather forecasts and go, risky or no-go verdicts for plans, sold per call over x402 from Open-Meteo and NWS data.",
+  "author": {
+    "name": "nirholas"
+  },
+  "repository": "https://github.com/nirholas/x402-weather-guard",
+  "homepage": "https://nirholas.github.io/x402-weather-guard/",
+  "license": "Apache-2.0",
+  "keywords": [
+    "x402",
+    "weather",
+    "forecast",
+    "open-meteo",
+    "nws",
+    "go-no-go"
+  ]
+}
